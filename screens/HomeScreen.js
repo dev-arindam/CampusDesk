@@ -18,7 +18,7 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
         <View style={styles.profile}>
           <View style={styles.avatar} />
           <View>
-            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.name}>{user.fname} {user.lname}</Text>
             <Text style={styles.id}>ID-{user.id}</Text>
           </View>
         </View>
