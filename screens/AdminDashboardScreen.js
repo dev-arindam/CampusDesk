@@ -9,13 +9,13 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-import UsersContentScreen from "./UsersContentScreen";
+// import UsersContentScreen from "./UsersContentScreen";
 import AdminUsersScreen from "./AdminUsersScreen";
 import AdminStudentScreen from "./AdminStudentScreen";
 import AdminDepartmentScreen from "./AdminDepartmentScreen";
 import AdminSubjectScreen from "./AdminSubjectScreen";
 import AdminQuizCreationScreen from "./AdminQuizCreationScreen";
-import TeacherAssignedSubject from "./TeacherAssignedSubject";
+// import TeacherAssignedSubject from "./TeacherAssignedSubject";
 
 
 
@@ -135,7 +135,9 @@ export default function AdminDashboardScreen({ user, scores }) {
   /* ---------------- Asiign teacher SECTION ---------------- */
   const TeacherAssignSection = () => (
     <>
-      <TeacherAssignedSubject />
+      <Text style={[styles.sectionTitle, { marginTop: 24 }]}>
+       Under Processing
+      </Text>
        
     </>
   );
