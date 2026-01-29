@@ -1,14 +1,48 @@
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ScrollView
+  ScrollView,
+  Animated,
+  Dimensions
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory }) {
+export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory, onOpenAdmin }) {
+const screenWidth = Dimensions.get("window").width;
+
+const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+const slideAnim = useRef(new Animated.Value(-screenWidth)).current;
+
+const openSidebar = () => {
+  setIsSidebarOpen(true);
+  Animated.timing(slideAnim, {
+    toValue: 0,
+    duration: 300,
+    useNativeDriver: true,
+  }).start();
+};
+
+const closeSidebar = () => {
+  Animated.timing(slideAnim, {
+    toValue: -screenWidth,
+    duration: 300,
+    useNativeDriver: true,
+  }).start(() => setIsSidebarOpen(false));
+};
+
+const sidebarItems = [
+  { label: "Home", icon: "home-outline" },
+  { label: "Profile", icon: "person-outline" },
+  { label: "My Scores", icon: "stats-chart-outline" },
+  { label: "Settings", icon: "settings-outline" },
+  { label: "Admin", icon: "shield-checkmark-outline" },
+  { label: "Logout", icon: "log-out-outline" },
+];
+
 
   return (
     <View style={styles.container}>
@@ -18,14 +52,19 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
         <View style={styles.profile}>
           <View style={styles.avatar} />
           <View>
-            <Text style={styles.name}>{user.name}</Text>
-            <Text style={styles.id}>ID-{user.id}</Text>
+            <Text style={styles.name}>{user.fname} {user.lname}</Text>
+            {/* <Text style={style
+            s.id}>ID-{user.id}</Text> */}
           </View>
         </View>
 
         <View style={styles.coinBox}>
-          <Ionicons name="diamond" size={16} color="#00c2ff" />
-          <Text style={styles.coinText}>160</Text>
+          <TouchableOpacity onPress={openSidebar}>
+  <Ionicons name="menu" size={28} color="#00c2ff" />
+</TouchableOpacity>
+
+          {/* <Ionicons name="menu" size={28} color="#00c2ff" /> */}
+          {/* <Text style={styles.coinText}>160</Text> */}
         </View>
       </View>
 
@@ -109,6 +148,62 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
         <Ionicons name="heart" size={22} color="#999" />
         <Ionicons name="person" size={22} color="#999" />
       </View>
+
+{isSidebarOpen && (
+  <>
+    {/* BACKGROUND OVERLAY */}
+    <TouchableOpacity
+      activeOpacity={1}
+      style={styles.overlay}
+      onPress={closeSidebar}
+    />
+
+    {/* SIDEBAR */}
+    <Animated.View
+      style={[
+        styles.sidebar,
+        { transform: [{ translateX: slideAnim }] },
+      ]}
+    >
+      {/* CLOSE BUTTON */}
+      <TouchableOpacity style={styles.closeBtn} onPress={closeSidebar}>
+        <Ionicons name="close" size={28} color="#333" />
+      </TouchableOpacity>
+
+      {/* MENU ITEMS */}
+    <View style={styles.sidebarMenu}>
+              {sidebarItems.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={styles.sidebarItemBox}
+                 onPress={() => {
+  if (item.label === "Admin") {
+    onOpenAdmin();      // ✅ OPEN ADMIN
+  }
+  closeSidebar();
+}}
+
+                >
+                  <View style={styles.sidebarRow}>
+                    <Ionicons
+                      name={item.icon}
+                      size={20}
+                      color="#0b3d91"
+                      style={{ marginRight: 12 }}
+                    />
+                    <Text style={styles.sidebarItem}>{item.label}</Text>
+                  </View>
+                  <View style={styles.sidebarUnderline} />
+                </TouchableOpacity>
+              ))}
+            </View>
+
+
+    </Animated.View>
+  </>
+)}
+
+
 
     </View>
   );
@@ -277,5 +372,59 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#eee",
     backgroundColor: "#fff"
-  }
+  },
+ sidebar: {
+  position: "absolute",
+  top: 90,          // 👈 navbar height (adjust if needed)
+  left: 0,
+  width: "70%",
+  height: "100%",
+  backgroundColor: "#f5f7fb",
+  paddingTop: 30,
+  paddingHorizontal: 20,
+  zIndex: 100,
+},
+
+closeBtn: {
+  position: "absolute",
+  top: 20,
+  right: 20,
+},
+
+sidebarItem: {
+  color: "#333",
+  fontSize: 18,
+  marginVertical: 15,
+  fontWeight: "500",
+},
+overlay: {
+  position: "absolute",
+  top: 90,          // SAME as sidebar top
+  left: 0,
+  right: 0,
+  bottom: 0,
+  backgroundColor: "rgba(0,0,0,0.55)",
+  zIndex: 50,
+},
+
+sidebarMenu: {
+  marginTop: 20,
+},
+
+sidebarItemBox: {
+  paddingVertical: 6,
+},
+
+sidebarUnderline: {
+  height: 1,
+  backgroundColor: "#ddd",
+  marginTop: 4,
+},
+
+sidebarRow: {
+  flexDirection: "row",
+  alignItems: "center",
+},
+
+
 });

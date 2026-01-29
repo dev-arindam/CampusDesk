@@ -3,6 +3,7 @@ import HomeScreen from "./screens/HomeScreen";
 import QuizScreen from "./screens/QuizScreen";
 import ResultScreen from "./screens/ResultScreen";
 import LoginScreen from "./screens/LoginScreen";
+import AdminScreen from "./screens/AdminScreen";
 
 export default function App() {
 const [user, setUser] = useState(null);
@@ -36,8 +37,25 @@ const [user, setUser] = useState(null);
             setCategory(cat);
             setScreen("quiz");
           }}
+           onOpenAdmin={() => setScreen("admin")}
         />
       )}
+
+      {screen === "admin" && (
+  <AdminScreen
+    user={user}                // ✅ pass user
+    scores={scores}            // ✅ pass scores
+    onStartQuiz={() => {       // optional, if you want play button inside student screen
+      setCategory("HTML");
+      setScreen("quiz");
+    }}
+    onSelectCategory={(cat) => {
+      setCategory(cat);
+      setScreen("quiz");
+    }}
+    onBack={() => setScreen("home")} // back function
+  />
+)}
 
       {screen === "quiz" && (
         <QuizScreen
