@@ -12,8 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 
 export default function AdminUsersScreen() {
   const [students, setStudents] = useState([
-    { id: "1", name: "Arindam Bar", email: "ladykiller@mail.com" ,avatar:"https://randomuser.me/api/portraits/women/68.jpg"},
-    { id: "2", name: "Jane Smith", email: "jane@mail.com" ,avatar:"https://randomuser.me/api/portraits/women/44.jpg" },
+    { id: "1", name: "Arindam Bar", email: "ladykiller@mail.com" ,avatar:"https://hips.hearstapps.com/clv.h-cdn.co/assets/16/18/gettyimages-529202089.jpg?crop=0.6668237511781339xw:1xh;center,top"},
+    { id: "2", name: "Jit Samanta", email: "scootywalilover@mail.com" ,avatar:"https://i.pinimg.com/1200x/c4/6f/20/c46f2029822079bacfd413c49658dafd.jpg" },
   ]);
 
   const [modalVisible, setModalVisible] = useState(false);

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions,Image } from "react-native";
 import { SafeAreaView } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -23,7 +23,8 @@ const getGreeting = () => {
         <LinearGradient colors={['#6366f1', '#4f46e5']} style={styles.header}>
           <View style={styles.headerTop}>
             <View style={styles.avatar}>
-              <Ionicons name="person" size={28} color="#fff" />
+              {/* <Ionicons name="person" size={28} color="#fff" /> */}
+              <Image source={{ uri: "https://yt3.googleusercontent.com/ytc/AIdro_m-cnBEfegF7w5aXISw453szyUUC0m6IvO3mbOYzd8Dq5E=s900-c-k-c0x00ffffff-no-rj" }} style={styles.avatar} />
             </View>
             <View style={{ flex: 1, marginLeft: 12 }}>
               <Text style={styles.name}>{user?.fname || "Professor Name"} {user?.lname || "Professor Name"}</Text>
