@@ -4,6 +4,7 @@ import QuizScreen from "./screens/QuizScreen";
 import ResultScreen from "./screens/ResultScreen";
 import LoginScreen from "./screens/LoginScreen";
 import AdminScreen from "./screens/AdminScreen";
+import TeacherScreen from "./screens/TeacherScreen";
 
 export default function App() {
 const [user, setUser] = useState(null);
@@ -23,6 +24,9 @@ const [user, setUser] = useState(null);
   }
   if (user.role_id===2) {
     return <AdminScreen user={user} scores={scores} />;
+  }
+   if (user.role_id===1) {
+    return <TeacherScreen user={user} />;
   }
   return (
 

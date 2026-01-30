@@ -44,6 +44,7 @@ export default function AdminScreen({ user, scores }) {
     { label: "Users", icon: "people-outline" },
     { label: "Department", icon: "business-outline" },
     { label: "Quiz Creation", icon: "create-outline" },
+    // { label: "Assigned Subject", icon: "book-outline" },
     { label: "Student", icon: "school-outline" },
     { label: "Logout", icon: "log-out-outline" },
   ];
