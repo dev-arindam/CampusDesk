@@ -3,8 +3,12 @@ import HomeScreen from "./screens/HomeScreen";
 import QuizScreen from "./screens/QuizScreen";
 import ResultScreen from "./screens/ResultScreen";
 import LoginScreen from "./screens/LoginScreen";
-import AdminScreen from "./screens/AdminScreen";
 import AdminDashboardScreen from "./screens/AdminDashboardScreen";
+import TeacherDashboard from "./screens/TeacherDashboard";
+import StudentProfile from "./screens/StudentProfile";
+import StudentAttendance from "./screens/StudentAttendance";
+
+
 
 
 export default function App() {
@@ -27,7 +31,7 @@ const [user, setUser] = useState(null);
     return <AdminDashboardScreen user={user} scores={scores} />;
   }
   if (user.role_id === 1) {
-    return <AdminDashboardScreen user={user} scores={scores} />;
+    return <TeacherDashboard user={user}/>;
   }
   return (
 
@@ -44,8 +48,14 @@ const [user, setUser] = useState(null);
             setCategory(cat);
             setScreen("quiz");
           }}
+          onOpenProfile={() => setScreen("profile")}
+          onOpenAttendance={() => setScreen("attendance")}
         />
       )}
+
+      {screen === "attendance" && (
+  <StudentAttendance onBack={() => setScreen("home")}/>
+)}
       
       {screen === "quiz" && (
         <QuizScreen
@@ -61,6 +71,14 @@ const [user, setUser] = useState(null);
           onQuit={() => setScreen("home")}
         />
       )}
+
+      {screen === "profile" && (
+  <StudentProfile
+    user={user}
+          onBack={() => setScreen("home")}
+    
+  />
+)}
 
       {screen === "result" && (
         <ResultScreen

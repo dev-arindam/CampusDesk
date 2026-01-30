@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import {
   View,
   Text,
+  Image,
   StyleSheet,
   TouchableOpacity,
   ScrollView,
@@ -9,13 +10,15 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
-// import UsersContentScreen from "./UsersContentScreen";
 import AdminUsersScreen from "./AdminUsersScreen";
 import AdminStudentScreen from "./AdminStudentScreen";
 import AdminDepartmentScreen from "./AdminDepartmentScreen";
 import AdminSubjectScreen from "./AdminSubjectScreen";
 import AdminQuizCreationScreen from "./AdminQuizCreationScreen";
-// import TeacherAssignedSubject from "./TeacherAssignedSubject";
+import TeacherAssignedSubject from "./TeacherAssignedSubject";
+import Nodatafound from "./nodatafound";
+
+
 
 
 
@@ -95,23 +98,23 @@ export default function AdminDashboardScreen({ user, scores }) {
   /* ---------------- STUDENT SECTION ---------------- */
   const StudentSection = () => (
     <>
-    <AdminStudentScreen
-             user={user} scores={scores} 
-            />
-      
+      <AdminStudentScreen
+        user={user} scores={scores}
+      />
+
     </>
   );
- /* ---------------- SUBJECT SECTION ---------------- */
+  /* ---------------- SUBJECT SECTION ---------------- */
   const SubjectSection = () => (
     <>
-    <AdminSubjectScreen />
-      
+      <AdminSubjectScreen />
+
     </>
   );
   /* ---------------- DEPARTMENT SECTION ---------------- */
   const DepartmentSection = () => (
     <>
-      <AdminDepartmentScreen/>
+      <AdminDepartmentScreen />
     </>
   );
 
@@ -119,26 +122,25 @@ export default function AdminDashboardScreen({ user, scores }) {
   const UsersSection = () => (
     <>
       <AdminUsersScreen
-              
-            />
+
+      />
     </>
   );
 
   /* ---------------- QUIZ SECTION ---------------- */
   const QuizSection = () => (
     <>
-      <AdminQuizCreationScreen/>
-      
+      <AdminQuizCreationScreen />
+
     </>
   );
 
   /* ---------------- Asiign teacher SECTION ---------------- */
   const TeacherAssignSection = () => (
     <>
-      <Text style={[styles.sectionTitle, { marginTop: 24 }]}>
-       Under Processing
-      </Text>
-       
+
+      <TeacherAssignedSubject />
+
     </>
   );
 
@@ -153,12 +155,14 @@ export default function AdminDashboardScreen({ user, scores }) {
         return <DepartmentSection />;
       case "Users":
         return <UsersSection />;
-        case "Teacher Assign Subject":
+      case "Teacher Assign Subject":
         return <TeacherAssignSection />;
       case "Quiz Creation":
         return <QuizSection />;
-        case "Subject":
+      case "Subject":
         return <SubjectSection />;
+      case "Logout":
+        return <Nodatafound />;
       default:
         return null;
     }
@@ -169,7 +173,12 @@ export default function AdminDashboardScreen({ user, scores }) {
       {/* ---------------- HEADER ---------------- */}
       <View style={styles.header}>
         <View style={styles.profile}>
-          <View style={styles.avatar} />
+          <View style={styles.avatar}>
+            <Image source={{ uri:"https://static.wikia.nocookie.net/universalstudios/images/e/ed/Shrek2-disneyscreencaps.com-4305.jpg/revision/latest?cb=20250608051324"}} style={{width: 40,
+                height: 40,
+                borderRadius: 20,
+                marginRight: 12}} />
+          </View>
           <Text style={styles.name}>
             {user?.fname} {user?.lname}
           </Text>

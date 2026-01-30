@@ -1,14 +1,48 @@
+import React, { useState, useRef } from "react";
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ScrollView
+  ScrollView,
+  Animated,
+  Dimensions
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory }) {
+export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory, onOpenAttendance,onOpenProfile}) {
+
+  // ===== SIDEBAR STATE & ANIMATION =====
+  const screenWidth = Dimensions.get("window").width;
+  const sidebarX = useRef(new Animated.Value(-screenWidth)).current;
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
+  const openSidebar = () => {
+    setSidebarOpen(true);
+    Animated.timing(sidebarX, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true
+    }).start();
+  };
+
+  const closeSidebar = () => {
+    Animated.timing(sidebarX, {
+      toValue: -screenWidth,
+      duration: 300,
+      useNativeDriver: true
+    }).start(() => setSidebarOpen(false));
+  };
+
+  const sidebarMenus = [
+    { label: "Home", icon: "home-outline" },
+    { label: "Attendance", icon: "calendar-outline" },
+    { label: "Categories", icon: "grid-outline" },
+    { label: "Scores", icon: "stats-chart-outline" },
+    { label: "Profile", icon: "person-outline" },
+    { label: "Logout", icon: "log-out-outline" }
+  ];
 
   return (
     <View style={styles.container}>
@@ -23,10 +57,10 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
           </View>
         </View>
 
-        <View style={styles.coinBox}>
-          <Ionicons name="diamond" size={16} color="#00c2ff" />
-          <Text style={styles.coinText}>160</Text>
-        </View>
+        {/* ===== REPLACE COINBOX ICON WITH THREE-BAR MENU ===== */}
+        <TouchableOpacity style={styles.coinBox} onPress={openSidebar}>
+          <Ionicons name="menu" size={26} color="#0b3d91" />
+        </TouchableOpacity>
       </View>
 
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -50,16 +84,13 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
         {/* CATEGORIES */}
         <Text style={styles.sectionTitle}>Categories</Text>
         <View style={styles.categories}>
-          {[
-            { icon: "html5", label: "HTML", color: "#f16529" },
+          {[{ icon: "html5", label: "HTML", color: "#f16529" },
             { icon: "js", label: "JAVASCRIPT", color: "#f7df1e" },
             { icon: "react", label: "REACT", color: "#61dafb" },
             { icon: "cuttlefish", label: "C++", color: "#00599C" },
             { icon: "python", label: "PYTHON", color: "#306998" }
           ].map((item, index) => (
-            <TouchableOpacity key={index} style={styles.categoryItem}
-              onPress={() => onSelectCategory(item.label)}
-            >
+            <TouchableOpacity key={index} style={styles.categoryItem} onPress={() => onSelectCategory(item.label)}>
               <FontAwesome5 name={item.icon} size={26} color={item.color} />
               <Text style={styles.categoryText}>{item.label}</Text>
             </TouchableOpacity>
@@ -68,8 +99,7 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
 
         {/* RECENT ACTIVITY */}
         <Text style={styles.sectionTitle}>Recent Activity</Text>
-        {[
-          { title: "HTML", key: "HTML", color: "#f16529" },
+        {[{ title: "HTML", key: "HTML", color: "#f16529" },
           { title: "JAVASCRIPT", key: "JAVASCRIPT", color: "#f7df1e" },
           { title: "REACT", key: "REACT", color: "#61dafb" },
           { title: "C++", key: "C++", color: "#00599C" },
@@ -99,10 +129,52 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
             </View>
           </TouchableOpacity>
         ))}
-
       </ScrollView>
 
-      {/* BOTTOM NAV (UI only) */}
+      {/* SIDEBAR OVERLAY */}
+      {sidebarOpen && (
+        <TouchableOpacity
+          style={styles.overlay}
+          activeOpacity={1}
+          onPress={closeSidebar}
+        />
+      )}
+
+      {/* SIDEBAR */}
+     <Animated.View style={[styles.sidebar, { transform: [{ translateX: sidebarX }], top: 90 }]}>
+        {/* CROSS ICON */}
+        <TouchableOpacity onPress={closeSidebar} style={{ alignSelf: "flex-end", marginTop: 10 }}>
+          <Ionicons name="close" size={26} color="#0b3d91" />
+        </TouchableOpacity>
+
+        {/* SIDEBAR TITLE */}
+        <Text style={styles.sidebarTitle}>Menu</Text>
+
+        {/* MENU ITEMS */}
+        {sidebarMenus.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            style={styles.sidebarItem}
+            onPress={() => {
+              if (item.label === "Profile") {
+                onOpenProfile(); 
+              }
+              if (item.label === "Attendance") { 
+                onOpenAttendance();
+              }
+              closeSidebar(); 
+            }}
+          >
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
+              <Ionicons name={item.icon} size={20} color="#0b3d91" />
+              <Text style={styles.sidebarText}>{item.label}</Text>
+            </View>
+          </TouchableOpacity>
+        ))}
+      </Animated.View>
+
+
+      {/* BOTTOM NAV */}
       <View style={styles.bottomNav}>
         <Ionicons name="home" size={22} color="#0b3d91" />
         <Ionicons name="grid" size={22} color="#999" />
@@ -114,12 +186,12 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
   );
 }
 
+// ===== ADD THESE SIDEBAR STYLES =====
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#f5f7fb"
   },
-
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -127,12 +199,10 @@ const styles = StyleSheet.create({
     marginTop:40,
     alignItems: "center"
   },
-
   profile: {
     flexDirection: "row",
     alignItems: "center"
   },
-
   avatar: {
     width: 45,
     height: 45,
@@ -140,17 +210,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#ccc",
     marginRight: 10
   },
-
   name: {
     fontWeight: "bold",
     fontSize: 14
   },
-
   id: {
     fontSize: 12,
     color: "#777"
   },
-
   coinBox: {
     flexDirection: "row",
     backgroundColor: "#e9f9ff",
@@ -158,31 +225,22 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignItems: "center"
   },
-
-  coinText: {
-    marginLeft: 4,
-    fontWeight: "bold"
-  },
-
   banner: {
     backgroundColor: "#0b3d91",
     margin: 20,
     padding: 20,
     borderRadius: 16
   },
-
   bannerTitle: {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold"
   },
-
   bannerSub: {
     color: "#dbe6ff",
     marginVertical: 8,
     fontSize: 12
   },
-
   playBtn: {
     backgroundColor: "#fff",
     alignSelf: "flex-start",
@@ -190,12 +248,10 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 8
   },
-
   playText: {
     color: "#0b3d91",
     fontWeight: "bold"
   },
-
   searchBox: {
     flexDirection: "row",
     backgroundColor: "#fff",
@@ -204,33 +260,27 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     alignItems: "center"
   },
-
   searchInput: {
     marginLeft: 8,
     flex: 1
   },
-
   sectionTitle: {
     marginHorizontal: 20,
     marginTop: 20,
     fontWeight: "bold"
   },
-
   categories: {
     flexDirection: "row",
     justifyContent: "space-between",
     margin: 20
   },
-
   categoryItem: {
     alignItems: "center"
   },
-
   categoryText: {
     fontSize: 10,
     marginTop: 4
   },
-
   activityCard: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -241,21 +291,17 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     alignItems: "center"
   },
-
   activityLeft: {
     flexDirection: "row",
     alignItems: "center"
   },
-
   activityTitle: {
     fontWeight: "bold"
   },
-
   activitySub: {
     fontSize: 11,
     color: "#777"
   },
-
   scoreCircle: {
     width: 48,
     height: 48,
@@ -264,12 +310,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center"
   },
-
   scoreText: {
     fontSize: 10,
     fontWeight: "bold"
   },
-
   bottomNav: {
     flexDirection: "row",
     justifyContent: "space-around",
@@ -277,5 +321,41 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderColor: "#eee",
     backgroundColor: "#fff"
+  },
+
+  /* ===== SIDEBAR ===== */
+  sidebar: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    bottom: 0,
+    width: 260,
+    backgroundColor: "#fff",
+    // paddingTop: 60,
+    paddingHorizontal: 20,
+    zIndex: 10,
+    elevation: 10
+  },
+  sidebarTitle: {
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 20
+  },
+  sidebarItem: {
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderColor: "#ddd"
+  },
+  sidebarText: {
+    fontSize: 14
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0,0,0,0.3)",
+    zIndex: 5
   }
 });

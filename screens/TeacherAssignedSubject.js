@@ -138,7 +138,7 @@ export default function TeacherSubject() {
       });
 
       const result = await res.json();
-         alert(JSON.stringify(result, null, 2));
+        //  alert(JSON.stringify(result, null, 2));
       if (result.status === 'success') {
         // Alert.alert("Success", "Assigned Successfully");
 
