@@ -9,14 +9,16 @@ import {
   Animated,
   Dimensions,
 } from "react-native";
+import { LineChart, BarChart } from "react-native-chart-kit";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import AdminUsersScreen from "./AdminUsersScreen";
 import AdminStudentScreen from "./AdminStudentScreen";
 import AdminDepartmentScreen from "./AdminDepartmentScreen";
 import AdminSubjectScreen from "./AdminSubjectScreen";
 import AdminQuizCreationScreen from "./AdminQuizCreationScreen";
+import AdminExpenseScreen from "./AdminExpenseScreen";
 import TeacherAssignedSubject from "./TeacherAssignedSubject";
-import Nodatafound from "./nodatafound";
+import LoginScreen from "../login/LoginScreen";
 
 import AdminStudentUpgradeScreen from "./AdminStudentUpgradeScreen";
 
@@ -79,6 +81,15 @@ const sidebarItems = [
   { label: "Logout", icon: "log-out-outline" },
 ];
 
+  const sidebarItems = [
+    { label: "Dashboard", icon: "home-outline" },
+    { label: "Users", icon: "people-outline" },
+    { label: "Department", icon: "business-outline" },
+    { label: "Subject", icon: "book-outline" },
+    { label: "Quiz Creation", icon: "create-outline" },
+    { label: "Student", icon: "school-outline" },
+    { label: "Teacher Assign Subject", icon: "people-outline" },
+  ];
 
   /* ---------------- DASHBOARD SECTION ---------------- */
   const DashboardSection = () => (
@@ -183,6 +194,15 @@ const sidebarItems = [
 
     }
 
+  );
+  /* ---------------- EXPENSE SECTION ---------------- */
+  const ExpenseSection = () => (
+    <>
+      <AdminExpenseScreen
+      />
+
+    </>
+  );
   /* ---------------- SUBJECT SECTION ---------------- */
   const SubjectSection = () => (
     <>
@@ -274,6 +294,26 @@ case "Student Upgrade":
   }
 };
 
+  const renderContent = () => {
+    switch (activeMenu) {
+      case "Dashboard":
+        return <DashboardSection />;
+      case "Student":
+        return <StudentSection />;
+      case "Department":
+        return <DepartmentSection />;
+      case "Users":
+        return <UsersSection />;
+      case "Teacher Assign Subject":
+        return <TeacherAssignSection />;
+      case "Quiz Creation":
+        return <QuizSection />;
+      case "Subject":
+        return <AdminExpenseScreen />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -376,6 +416,35 @@ case "Student Upgrade":
   );
 })}
 
+            {sidebarItems.map((item, index) => (
+              <TouchableOpacity
+                key={index}
+                style={[
+                  styles.sidebarItemBox,
+                  activeMenu === item.label && styles.activeItem,
+                ]}
+                onPress={() => {
+                  setActiveMenu(item.label);
+                  closeSidebar();
+                }}
+              >
+                <Ionicons name={item.icon} size={20} />
+                <Text style={styles.sidebarText}>{item.label}</Text>
+              </TouchableOpacity>
+            ))}
+            <TouchableOpacity
+                
+                style={[
+                  styles.sidebarItemBox,
+                  activeMenu === "Logout" && styles.activeItem,
+                ]}
+                onPress={() => {
+                  
+                }}
+              >
+                <Ionicons name="log-out-outline" size={20} />
+                <Text style={styles.sidebarText}>Logout</Text>
+              </TouchableOpacity>
           </Animated.View>
         </>
       )}
