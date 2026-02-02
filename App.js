@@ -7,9 +7,9 @@ import AdminDashboardScreen from "./admin/AdminDashboardScreen";
 import TeacherDashboard from "./teacher/TeacherDashboard";
 import StudentProfile from "./student/StudentProfile";
 import StudentAttendance from "./student/StudentAttendance";
-
-
-
+import MySubjectScreen from "./student/MySubjectScreen";
+import AssignmentScreen from "./student/AssignmentScreen";
+import ChatScreen from "./student/ChatScreen";
 
 export default function App() {
 const [user, setUser] = useState(null);
@@ -28,10 +28,10 @@ const [user, setUser] = useState(null);
     return <LoginScreen onLoginSuccess={setUser} />;
   }
   if (user.role_id === 2) {
-    return <AdminDashboardScreen user={user} scores={scores} />;
+    return <AdminDashboardScreen user={user} scores={scores}  onLogout={() => setUser(null)} />;
   }
   if (user.role_id === 1) {
-    return <TeacherDashboard user={user}/>;
+    return <TeacherDashboard user={user} onLogout={() => setUser(null)} />;
   }
   return (
 
@@ -50,12 +50,25 @@ const [user, setUser] = useState(null);
           }}
           onOpenProfile={() => setScreen("profile")}
           onOpenAttendance={() => setScreen("attendance")}
+          onOpenMySubject={() => setScreen("mySubject")}
+          onOpenAssignment={() => setScreen("assignment")}
+          onOpenChat={() => setScreen("chat")}
+          onLogout={() => setUser(null)}
         />
       )}
-
+{screen === "mySubject" && (
+  <MySubjectScreen onBack={() => setScreen("home")} />
+)}
       {screen === "attendance" && (
   <StudentAttendance onBack={() => setScreen("home")}/>
 )}
+{screen === "assignment" && (
+  <AssignmentScreen onBack={() => setScreen("home")} />
+)}
+{screen === "chat" && (
+  <ChatScreen onBack={() => setScreen("home")} />
+)}
+
       
       {screen === "quiz" && (
         <QuizScreen

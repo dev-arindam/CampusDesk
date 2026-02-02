@@ -11,7 +11,7 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
-export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory, onOpenAttendance,onOpenProfile}) {
+export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory, onOpenAttendance,onOpenProfile, onOpenMySubject, onOpenAssignment, onOpenChat, onLogout}) {
 
   // ===== SIDEBAR STATE & ANIMATION =====
   const screenWidth = Dimensions.get("window").width;
@@ -39,8 +39,11 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
     { label: "Home", icon: "home-outline" },
     { label: "Attendance", icon: "calendar-outline" },
     { label: "Categories", icon: "grid-outline" },
+    { label: "My SubJect", icon: "library-outline" },
+    { label: "Assignment", icon: "clipboard-text-outline" },
     { label: "Scores", icon: "stats-chart-outline" },
     { label: "Profile", icon: "person-outline" },
+    { label: "Chat", icon: "chatbubble"},
     { label: "Logout", icon: "log-out-outline" }
   ];
 
@@ -155,15 +158,31 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
           <TouchableOpacity
             key={index}
             style={styles.sidebarItem}
-            onPress={() => {
-              if (item.label === "Profile") {
-                onOpenProfile(); 
-              }
-              if (item.label === "Attendance") { 
-                onOpenAttendance();
-              }
-              closeSidebar(); 
-            }}
+           onPress={() => {
+  if (item.label === "Profile") {
+    onOpenProfile();
+  } 
+  else if (item.label === "Attendance") {
+    onOpenAttendance();
+  } 
+   else if (item.label === "My SubJect") {
+    onOpenMySubject();   
+  }
+  else if (item.label === "Assignment") {
+  onOpenAssignment();
+}
+ else if (item.label === "Chat") {
+   onOpenChat(); 
+}
+  else if (item.label === "Logout") {
+    closeSidebar();
+    onLogout();
+    return;
+  }
+
+  closeSidebar();
+}}
+
           >
             <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
               <Ionicons name={item.icon} size={20} color="#0b3d91" />
