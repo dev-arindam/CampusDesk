@@ -11,7 +11,11 @@ import {
 } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 
+<<<<<<< HEAD:student/HomeScreen.js
 export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory, onOpenAttendance,onOpenProfile, onOpenMySubject, onOpenAssignment, onOpenChat, onLogout}) {
+=======
+export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory, onOpenAdmin }) {
+>>>>>>> 3b8d9c2d34860cdbc4cea375afb48e5d63c832a6:screens/HomeScreen.js
 
   // ===== SIDEBAR STATE & ANIMATION =====
   const screenWidth = Dimensions.get("window").width;
@@ -37,6 +41,7 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
 
   const sidebarMenus = [
     { label: "Home", icon: "home-outline" },
+<<<<<<< HEAD:student/HomeScreen.js
     { label: "Attendance", icon: "calendar-outline" },
     { label: "Categories", icon: "grid-outline" },
     { label: "My SubJect", icon: "library-outline" },
@@ -44,6 +49,12 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
     { label: "Scores", icon: "stats-chart-outline" },
     { label: "Profile", icon: "person-outline" },
     { label: "Chat", icon: "chatbubble"},
+=======
+    { label: "Categories", icon: "grid-outline" },
+    { label: "Scores", icon: "stats-chart-outline" },
+    { label: "Profile", icon: "person-outline" },
+    // { label: "Admin", icon: "person-outline" },
+>>>>>>> 3b8d9c2d34860cdbc4cea375afb48e5d63c832a6:screens/HomeScreen.js
     { label: "Logout", icon: "log-out-outline" }
   ];
 
@@ -158,6 +169,7 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
           <TouchableOpacity
             key={index}
             style={styles.sidebarItem}
+<<<<<<< HEAD:student/HomeScreen.js
            onPress={() => {
   if (item.label === "Profile") {
     onOpenProfile();
@@ -183,6 +195,14 @@ export default function HomeScreen({ user, scores, onStartQuiz, onSelectCategory
   closeSidebar();
 }}
 
+=======
+            onPress={() => {
+              if (item.label === "Admin") {
+                onOpenAdmin(); 
+              }
+              closeSidebar(); 
+            }}
+>>>>>>> 3b8d9c2d34860cdbc4cea375afb48e5d63c832a6:screens/HomeScreen.js
           >
             <View style={{ flexDirection: "row", alignItems: "center", gap: 12 }}>
               <Ionicons name={item.icon} size={20} color="#0b3d91" />

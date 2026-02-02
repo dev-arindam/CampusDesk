@@ -1,4 +1,5 @@
 import { useState } from "react";
+<<<<<<< HEAD
 import HomeScreen from "./student/HomeScreen";
 import QuizScreen from "./student/QuizScreen";
 import ResultScreen from "./student/ResultScreen";
@@ -10,6 +11,14 @@ import StudentAttendance from "./student/StudentAttendance";
 import MySubjectScreen from "./student/MySubjectScreen";
 import AssignmentScreen from "./student/AssignmentScreen";
 import ChatScreen from "./student/ChatScreen";
+=======
+import HomeScreen from "./screens/HomeScreen";
+import QuizScreen from "./screens/QuizScreen";
+import ResultScreen from "./screens/ResultScreen";
+import LoginScreen from "./screens/LoginScreen";
+import AdminScreen from "./screens/AdminScreen";
+import TeacherScreen from "./screens/TeacherScreen";
+>>>>>>> 3b8d9c2d34860cdbc4cea375afb48e5d63c832a6
 
 export default function App() {
 const [user, setUser] = useState(null);
@@ -27,11 +36,19 @@ const [user, setUser] = useState(null);
   if (!user) {
     return <LoginScreen onLoginSuccess={setUser} />;
   }
+<<<<<<< HEAD
   if (user.role_id === 2) {
     return <AdminDashboardScreen user={user} scores={scores}  onLogout={() => setUser(null)} />;
   }
   if (user.role_id === 1) {
     return <TeacherDashboard user={user} onLogout={() => setUser(null)} />;
+=======
+  if (user.role_id===2) {
+    return <AdminScreen user={user} scores={scores} />;
+  }
+   if (user.role_id===1) {
+    return <TeacherScreen user={user} />;
+>>>>>>> 3b8d9c2d34860cdbc4cea375afb48e5d63c832a6
   }
   return (
 
@@ -48,12 +65,16 @@ const [user, setUser] = useState(null);
             setCategory(cat);
             setScreen("quiz");
           }}
+<<<<<<< HEAD
           onOpenProfile={() => setScreen("profile")}
           onOpenAttendance={() => setScreen("attendance")}
           onOpenMySubject={() => setScreen("mySubject")}
           onOpenAssignment={() => setScreen("assignment")}
           onOpenChat={() => setScreen("chat")}
           onLogout={() => setUser(null)}
+=======
+          //  onOpenAdmin={() => setScreen("admin")}
+>>>>>>> 3b8d9c2d34860cdbc4cea375afb48e5d63c832a6
         />
       )}
 {screen === "mySubject" && (
@@ -69,7 +90,26 @@ const [user, setUser] = useState(null);
   <ChatScreen onBack={() => setScreen("home")} />
 )}
 
+<<<<<<< HEAD
       
+=======
+      {/* {screen === "admin" && (
+  <AdminScreen
+    user={user}                // ✅ pass user
+    scores={scores}            // ✅ pass scores
+    onStartQuiz={() => {       // optional, if you want play button inside student screen
+      setCategory("HTML");
+      setScreen("quiz");
+    }}
+    onSelectCategory={(cat) => {
+      setCategory(cat);
+      setScreen("quiz");
+    }}
+    onBack={() => setScreen("home")} // back function
+  />
+)} */}
+
+>>>>>>> 3b8d9c2d34860cdbc4cea375afb48e5d63c832a6
       {screen === "quiz" && (
         <QuizScreen
         key={category}
