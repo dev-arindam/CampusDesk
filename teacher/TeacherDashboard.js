@@ -3,10 +3,11 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Dimensions } from
 import { SafeAreaView } from "react-native";
 import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import TeacherProfile from "./TeacherProfile"
 
 const { width } = Dimensions.get("window");
 
-export default function ModernTeacherDashboard({user ,onLogout}) {
+export default function ModernTeacherDashboard({user ,onLogout,setScreen}) {
    const [questionMenu, setQuestionMenu] = useState(false);
    const [studyMenu, setStudyMenu] = useState(false);
 
@@ -19,6 +20,9 @@ const getGreeting = () => {
 };
 
   return (
+    
+    
+    
     <SafeAreaView style={styles.safe}>
       <ScrollView showsVerticalScrollIndicator={false}>
 
@@ -36,7 +40,7 @@ const getGreeting = () => {
       <Text style={styles.role}>Assistant Professor</Text>
     </View>
 
-    {/* 🔴 LOGOUT */}
+    {/*  LOGOUT */}
     <TouchableOpacity onPress={onLogout}>
       <Ionicons name="log-out-outline" size={26} color="#fff" />
     </TouchableOpacity>

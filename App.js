@@ -1,96 +1,157 @@
 import { useState } from "react";
-import HomeScreen from "./student/HomeScreen";
+
+import StudentDashboard from "./student/StudentDashboard";
+import QuizDashboard from "./student/QuizDashboard";
 import QuizScreen from "./student/QuizScreen";
 import ResultScreen from "./student/ResultScreen";
+import StudentChat from "./student/StudentChat";
+import AssignmentScreen from "./student/StudentAssignment";
+import StudentProfile from "./student/StudentProfile";
+import StudentAttendance from "./student/StudentAttendance";
+import StudentFees from "./student/StudentFees";
+import SubjectScreen from "./student/StudentSubject";
+import NoticeBoard from "./student/StudentNoticeboard";
+import SemesterResult from "./student/SemesterResult";
+
 import LoginScreen from "./login/LoginScreen";
 import AdminDashboardScreen from "./admin/AdminDashboardScreen";
 import TeacherDashboard from "./teacher/TeacherDashboard";
-import StudentProfile from "./student/StudentProfile";
-import StudentAttendance from "./student/StudentAttendance";
-import StudentDashboard from "./student/StudentDashboard";
+import StudyMaterials from "./teacher/study/StudyMaterials";
 
 
 
 export default function App() {
-const [user, setUser] = useState(null);
+  const [user, setUser] = useState(null);
 
   const [screen, setScreen] = useState("home");
   const [category, setCategory] = useState("HTML");
+
   const [scores, setScores] = useState({
     HTML: 0,
     JAVASCRIPT: 0,
     REACT: 0,
     "C++": 0,
-    PYTHON: 0
+    PYTHON: 0,
   });
+
+  /* ===== LOGIN + ROLE SWITCH ===== */
 
   if (!user) {
     return <LoginScreen onLoginSuccess={setUser} />;
   }
-  if (user.role_id === 2) {
-    return <AdminDashboardScreen user={user} scores={scores}  onLogout={() => setUser(null)} />;
-  }
-  if (user.role_id === 1) {
-    return <TeacherDashboard user={user} onLogout={() => setUser(null)} />;
-  }
-  return (
 
+  if (user.role_id === 2) {
+    return <AdminDashboardScreen user={user} scores={scores} />;
+  }
+
+  if (user.role_id === 1) {
+    return <TeacherDashboard user={user} />;
+  }
+
+  /* ===== STUDENT FLOW ===== */
+
+  return (
     <>
+      {/* HOME */}
       {screen === "home" && (
-        <HomeScreen
-         user={user}
+        <StudentDashboard
+          user={user}
           scores={scores}
-          onStartQuiz={() => {
-            setCategory("HTML");
-            setScreen("quiz");
-          }}
-          onSelectCategory={(cat) => {
+          setScreen={setScreen}
+
+          onOpenProfile={() => setScreen("profile")}
+          onOpenAttendance={() => setScreen("attendance")}
+        />
+      )}
+
+      {/* PROFILE */}
+      {screen === "profile" && (
+        <StudentProfile
+          user={user}
+          onBack={() => setScreen("home")}
+          onLogout={() => {
+    setUser(null);      // or clear auth
+    setScreen("login");
+  }}
+        />
+      )}
+      {/* ASSIGNMENT */}
+      {screen === "assignment" && (
+        <AssignmentScreen
+
+          onBack={() => setScreen("home")}
+        />
+      )}
+
+      {/* ATTENDANCE */}
+      {screen === "attendance" && (
+        <StudentAttendance onBack={() => setScreen("home")} />
+      )}
+      {/* NOTICE */}
+      {screen === "notice" && (
+        <NoticeBoard onBack={() => setScreen("home")} />
+      )}
+
+      {/* FEES */}
+      {screen === "fees" && (
+        <StudentFees onBack={() => setScreen("home")} />
+      )}
+
+      {/* Chat */}
+      {screen === "chat" && (
+        <StudentChat onBack={() => setScreen("home")} />
+      )}
+      {/* Semester Result */}
+      {screen === "semesterResult" && (
+        <SemesterResult onBack={() => setScreen("home")} />
+      )}
+      {/* Subject */}
+      {screen === "subject" && (
+        <SubjectScreen onBack={() => setScreen("home")} />
+      )}
+      {/* ✅ QUIZ DASHBOARD (NEW STEP) */}
+      {screen === "quizDashboard" && (
+        <QuizDashboard
+          user={user}
+          scores={scores}
+          setScreen={setScreen}
+          setCategory={setCategory}
+          onStartQuiz={(cat) => {
             setCategory(cat);
             setScreen("quiz");
           }}
-          onOpenProfile={() => setScreen("profile")}
-          onOpenAttendance={() => setScreen("attendance")}
-          onOpenScore={() => setScreen("score")}
-
-          onLogout={() => setUser(null)}
+          onBack={() => setScreen("home")}
         />
       )}
-      {screen === "score" && (
-  <StudentDashboard/>
-)}
 
-      {screen === "attendance" && (
-  <StudentAttendance onBack={() => setScreen("home")}/>
-)}
-      
+      {/* QUIZ */}
       {screen === "quiz" && (
         <QuizScreen
-        key={category}
+          key={category}
           category={category}
           onFinish={(finalScore) => {
-            setScores(prev => ({
+            setScores((prev) => ({
               ...prev,
-              [category]: finalScore
+              [category]: finalScore,
             }));
             setScreen("result");
           }}
-          onQuit={() => setScreen("home")}
+          onQuit={() => setScreen("quizDashboard")}
         />
       )}
 
-      {screen === "profile" && (
-  <StudentProfile
-    user={user}
-          onBack={() => setScreen("home")}
-    
-  />
-)}
-
+      {/* RESULT */}
       {screen === "result" && (
         <ResultScreen
           score={scores[category]}
           category={category}
           onHome={() => setScreen("home")}
+        />
+      )}
+      {/* RESULT */}
+      {screen === "teacherStudyMaterials" && (
+        <StudyMaterials
+          setScreen={setScreen}
         />
       )}
     </>

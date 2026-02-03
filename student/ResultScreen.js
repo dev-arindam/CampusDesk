@@ -6,6 +6,17 @@ import {
   Share
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
+
+/* ===== DASHBOARD COLORS ===== */
+const COLORS = {
+  primary: "#8b5cf6",
+  secondary: "#22d3ee",
+  background: "#020617",
+  card: "#1e293b",
+  text: "#ffffff",
+  textSoft: "#c7d2fe"
+};
 
 export default function ResultScreen({ score, category, onHome }) {
 
@@ -21,76 +32,112 @@ export default function ResultScreen({ score, category, onHome }) {
     }
   };
 
+  const percent = Math.round((score / TOTAL_QUESTIONS) * 100);
+
   return (
     <View style={styles.container}>
 
-      {/* SCORE CIRCLE */}
-      <View style={styles.circleOuter}>
-        <View style={styles.circleInner}>
-          <Text style={styles.scoreTitle}>Your Score</Text>
-          <Text style={styles.scoreValue}>
-            {score}/{TOTAL_QUESTIONS}
-          </Text>
+      {/* HEADER STRIP */}
+      <LinearGradient
+        colors={[COLORS.primary, COLORS.secondary]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 0 }}
+        style={styles.headerBar}
+      />
+
+      {/* SCORE CARD */}
+      <View style={styles.card}>
+
+        {/* SCORE CIRCLE */}
+        <View style={styles.circleOuter}>
+          <View style={styles.circleInner}>
+            <Text style={styles.scoreTitle}>Your Score</Text>
+            <Text style={styles.scoreValue}>
+              {score}/{TOTAL_QUESTIONS}
+            </Text>
+            <Text style={styles.percent}>{percent}%</Text>
+          </View>
         </View>
+
+        <Text style={styles.congrats}>Great Job 🎉</Text>
+        <Text style={styles.subText}>
+          You completed the {category} quiz successfully
+        </Text>
+
       </View>
 
-      {/* TEXT */}
-      <Text style={styles.congrats}>Congratulations 🎉</Text>
-      <Text style={styles.subText}>
-        Great job, Rumi Aktar! You completed the {category} quiz.
-      </Text>
-
       {/* BUTTONS */}
-      <TouchableOpacity style={styles.shareBtn} onPress={handleShare}>
-        <Text style={styles.shareText}>Share</Text>
+      <TouchableOpacity style={styles.primaryBtn} onPress={handleShare}>
+        <Text style={styles.primaryText}>Share Result</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.homeBtn} onPress={onHome}>
-        <Text style={styles.homeText}>Back to Home</Text>
+      <TouchableOpacity style={styles.outlineBtn} onPress={onHome}>
+        <Text style={styles.outlineText}>Back to Home</Text>
       </TouchableOpacity>
 
       {/* BOTTOM NAV */}
       <View style={styles.bottomNav}>
-        <Ionicons name="home" size={22} color="#999" />
-        <Ionicons name="grid" size={22} color="#999" />
-        <Ionicons name="heart" size={22} color="#999" />
-        <Ionicons name="person" size={22} color="#999" />
+        <Ionicons name="home" size={22} color={COLORS.primary} />
+        <Ionicons name="grid" size={22} color="#475569" />
+        <Ionicons name="heart" size={22} color="#475569" />
+        <Ionicons name="person" size={22} color="#475569" />
       </View>
+
     </View>
   );
 }
 
-
 const styles = StyleSheet.create({
+
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: COLORS.background,
     alignItems: "center",
-    paddingTop: 100,
+    paddingTop: 90,
+  },
+
+  headerBar: {
+    position: "absolute",
+    top: 0,
+    width: "100%",
+    height: 140,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+  },
+
+  card: {
+    width: "88%",
+    backgroundColor: COLORS.card,
+    borderRadius: 22,
+    padding: 24,
+    alignItems: "center",
+    elevation: 8,
   },
 
   circleOuter: {
     width: 200,
     height: 200,
     borderRadius: 100,
-    backgroundColor: "#e6f0ff",
+    backgroundColor: "#0f172a",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 30
+    marginBottom: 24,
+    borderWidth: 2,
+    borderColor: COLORS.primary
   },
 
   circleInner: {
     width: 150,
     height: 150,
     borderRadius: 75,
-    backgroundColor: "#0b3d91",
+    backgroundColor: COLORS.primary,
     justifyContent: "center",
     alignItems: "center"
   },
 
   scoreTitle: {
-    color: "#cce0ff",
-    fontSize: 14
+    color: "#e0e7ff",
+    fontSize: 13
   },
 
   scoreValue: {
@@ -99,43 +146,52 @@ const styles = StyleSheet.create({
     fontWeight: "bold"
   },
 
+  percent: {
+    color: COLORS.secondary,
+    fontSize: 14,
+    marginTop: 4,
+    fontWeight: "600"
+  },
+
   congrats: {
-    fontSize: 22,
+    fontSize: 20,
     fontWeight: "bold",
-    color: "#0b3d91",
+    color: COLORS.text,
     marginTop: 10
   },
 
   subText: {
-    fontSize: 14,
-    color: "#555",
-    marginVertical: 6
+    fontSize: 13,
+    color: COLORS.textSoft,
+    marginTop: 6,
+    textAlign: "center"
   },
 
-  shareBtn: {
-    width: "85%",
-    backgroundColor: "#0b3d91",
-    padding: 14,
-    borderRadius: 10,
-    marginTop: 40
+  primaryBtn: {
+    width: "88%",
+    backgroundColor: COLORS.primary,
+    padding: 16,
+    borderRadius: 14,
+    marginTop: 28
   },
 
-  shareText: {
+  primaryText: {
     color: "#fff",
     textAlign: "center",
     fontWeight: "bold"
   },
 
-  homeBtn: {
-    width: "85%",
-    backgroundColor: "#0b3d91",
-    padding: 14,
-    borderRadius: 10,
+  outlineBtn: {
+    width: "88%",
+    borderWidth: 2,
+    borderColor: COLORS.secondary,
+    padding: 16,
+    borderRadius: 14,
     marginTop: 14
   },
 
-  homeText: {
-    color: "#fff",
+  outlineText: {
+    color: COLORS.secondary,
     textAlign: "center",
     fontWeight: "bold"
   },
@@ -146,9 +202,10 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-around",
-    paddingVertical: 14,
+    paddingVertical: 16,
+    backgroundColor: "#020617",
     borderTopWidth: 1,
-    borderColor: "#eee",
-    backgroundColor: "#fff"
+    borderColor: "#1e293b"
   }
+
 });
